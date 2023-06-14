@@ -1,17 +1,23 @@
 # frozen_string_literal: true
 
 require_relative 'rook'
+require_relative 'knight'
+require_relative 'bishop'
+require_relative 'queen'
+require_relative 'king'
+require_relative 'pawn'
 
+# class for the chess board
 class Board
-  attr_reader :pieces, :game_board
+  attr_reader :pieces, :game_board, :piece_positions
 
   def initialize(game_board = Array.new(8) { Array.new(8) { 0 } })
     @game_board = game_board
-    @pieces = Array.new
+    @pieces = []
+    @piece_positions = []
   end
 
   def print_board
-    clear_board
     place_pieces
     puts "\n \n"
     count = 8
@@ -26,20 +32,29 @@ class Board
   end
 
   def place_pieces
+    clear_board
+    @piece_positions = []
     @pieces.each do |piece|
-      y = piece.position[1]
+      print(piece)
+      print(piece.position)
       x = piece.position[0]
+      y = piece.position[1]
       @game_board[y][x] = piece
+      @piece_positions.append(piece.position)
     end
   end
 
   def change_position(piece, move_to)
+    if get_piece_at(move_to) != false
+      enemy_piece = get_piece_at(move_to)
+      delete_piece(enemy_piece)
+    end
     piece.position = move_to
   end
 
   def delete_piece(piece)
-    x = piece.position[1]
-    y = piece.position[0]
+    x = piece.position[0]
+    y = piece.position[1]
     @game_board[y][x] = 0
     @pieces.delete(piece)
   end
@@ -48,9 +63,18 @@ class Board
     @game_board = Array.new(8) { Array.new(8) { 0 } }
   end
 
+  def get_piece_at(position)
+    @pieces.each do |piece|
+      if piece.position == position
+        return piece
+      end
+    end
+    return false
+  end
+
   def update_pieces(piece)
-    y = piece.position[0]
-    x = piece.position[1]
+    x = piece.position[0]
+    y = piece.position[1]
     @game_board[y][x] = piece.symbol
   end
 
@@ -59,7 +83,22 @@ class Board
     @pieces << Rook.new('black', [7, 0])
     @pieces << Rook.new('white', [0, 7])
     @pieces << Rook.new('white', [7, 7])
-    # @pieces << Rook.new('black', [])
+    @pieces << Knight.new('black', [1, 0])
+    @pieces << Knight.new('black', [6, 0])
+    @pieces << Knight.new('white', [1, 7])
+    @pieces << Knight.new('white', [6, 7])
+    @pieces << Bishop.new('black', [2, 0])
+    @pieces << Bishop.new('black', [5, 0])
+    @pieces << Bishop.new('white', [2, 7])
+    @pieces << Bishop.new('white', [5, 7])
+    @pieces << Queen.new('black', [4, 0])
+    @pieces << Queen.new('white', [4, 7])
+    @pieces << King.new('black', [3, 0])
+    @pieces << King.new('white', [3, 7])
+    (0..7).each do |i|
+      @pieces << Pawn.new('black', [i, 1])
+      @pieces << Pawn.new('white', [i, 6])
+    end
   end
 
 end

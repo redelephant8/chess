@@ -9,6 +9,8 @@ class Game
   def initialize
     @board = Board.new
     @selected = nil
+    @b_checkmate = false
+    @w_checkmate = false
   end
 
   def turn
@@ -26,9 +28,18 @@ class Game
   def input
     puts 'Enter move: '
     input = gets.chomp
-    binding.pry
     convert_input(input)
   end
+
+  # def input_piece
+  #   puts 'Select a piece to move: '
+  #   input = gets.chomp
+  #   convert_piece_input(input)
+  # end
+
+  # def convert_piece_input(input)
+  #   return letter_to_number(input[0], input[1].to_i - 1)
+  # end
 
   # returns an array with the selected move and the selected square to move to
   def convert_input(input)
@@ -36,6 +47,20 @@ class Game
     move_to = [letter_to_number(input[3]), input[4].to_i - 1]
     [initial, move_to]
   end
+
+  # def input_move_initial
+  #   selected_position = input_piece
+  #   selected_piece = get_piece_selected_place(selected_position)
+  #   until validate_selected_place(selected_piece)
+  #     selected_position = input_piece
+  #     selected_piece = get_piece_selected_place(selected_piece)
+  #   end
+  #   selected_piece
+
+  # def input_move
+  #   initial_piece = input_move_initial
+  #   legit_moves = initial_piece.possible_moves(@board)
+  #   @board.print_board_legit
 
   def input_move
     move = input
@@ -57,13 +82,6 @@ class Game
     false
   end
 
-  def move_piece(x, y, selected)
-    previous_x = selected.position[0]
-    previous_y = selected.position[1]
-    @board[x][y] = selected
-    @board[previous_x][previous_y] = 0
-  end
-
   def validate_selected_place(selected_place)
     if check_current_pieces(selected_place)
       return true
@@ -73,6 +91,7 @@ class Game
 
   def validate_moving_place(moving_place, piece)
     moves = piece.possible_moves(@board)
+    print moves
     if moves.include?(moving_place)
       return true
     end

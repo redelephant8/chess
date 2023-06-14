@@ -1,12 +1,12 @@
 require_relative 'player'
 require 'pry-byebug'
-class Knight < Player
+class King < Player
   attr_reader :symbol
 
   def initialize(color, position)
     super
-    color == 'black' ? @symbol = '♘' : @symbol = '♞'
-    @possibilities = [[0,-1], [0, 1], [-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
+    color == 'black' ? @symbol = '♔' : @symbol = '♚'
+    @possibilities = [[1, 2], [2, 1], [-1, 2], [1, -2], [-2, 1], [2, -1], [-1, -2], [-2, -1]]
   end
 
   def possible_moves(board)
