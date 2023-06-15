@@ -9,15 +9,24 @@ class Game
   def initialize
     @board = Board.new
     @selected = nil
-    @b_checkmate = false
-    @w_checkmate = false
+    @black_check = false
+    @white_check = false
+    @black_checkmate = false
+    @white_checkmate = false
+    @turn = 'black'
   end
 
   def turn
     loop do
+      switch_turn
+      # binding.pry
       piece, move = input_move
       add_to_board(move[1], piece)
     end
+  end
+
+  def switch_turn
+    @turn == 'black' ? @turn = 'white' : @turn = 'black'
   end
 
   def add_to_board(move_to, piece)
@@ -26,7 +35,7 @@ class Game
   end
 
   def input
-    puts 'Enter move: '
+    puts @turn.capitalize + ', enter move: '
     input = gets.chomp
     convert_input(input)
   end
@@ -75,7 +84,7 @@ class Game
   def check_current_pieces(piece)
     board_pieces = @board.pieces
     board_pieces.each do |board_piece|
-      if board_piece == piece
+      if board_piece == piece && piece.color == @turn
         return true
       end
     end
@@ -91,7 +100,7 @@ class Game
 
   def validate_moving_place(moving_place, piece)
     moves = piece.possible_moves(@board)
-    print moves
+    # print moves
     if moves.include?(moving_place)
       return true
     end
@@ -106,6 +115,45 @@ class Game
       end
     end
   end
+
+  def checkCheck(board)
+    pieces = board.pieces
+    white_king_position = board.white_king.position
+    black_king_position = board.black_king.position
+    pieces.each do |piece|
+      moves = piece.possible_moves(board)
+      if moves.include?(white_king_position)
+        @white_check = true
+      end
+      if moves.include?(black_king_position)
+        @black_check = true
+      end
+    end
+  end
+
+  def can_black_evade_check
+    pieces = @board.pieces
+    pieces.each do |piece|
+    end
+  end
+
+  def duplicate_board_for_check_check
+    
+
+  def will_there_be_check(board, potential_move)
+    enemy_pieces = board.pieces
+    enemy_pieces.each do |piece|
+      if piece.color != @turn && !piece.is_a?(King)
+        moves = piece.possible_moves(board)
+        if moves.include?(potential_move)
+          return true
+        end
+      end
+    end
+    return false
+  end
+  
+
 end
 
 game = Game.new

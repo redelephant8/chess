@@ -6,7 +6,7 @@ class Knight < Player
   def initialize(color, position)
     super
     color == 'black' ? @symbol = '♘' : @symbol = '♞'
-    @possibilities = [[0,-1], [0, 1], [-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
+    @possibilities = [[1, 2], [2, 1], [-1, 2], [1, -2], [-2, 1], [2, -1], [-1, -2], [-2, -1]]
   end
 
   def possible_moves(board)

@@ -9,12 +9,14 @@ require_relative 'pawn'
 
 # class for the chess board
 class Board
-  attr_reader :pieces, :game_board, :piece_positions
+  attr_reader :pieces, :game_board, :piece_positions, :black_king, :white_king
 
   def initialize(game_board = Array.new(8) { Array.new(8) { 0 } })
     @game_board = game_board
     @pieces = []
     @piece_positions = []
+    @black_king = King.new('black', [3, 0])
+    @white_king = King.new('white', [3, 7])
   end
 
   def print_board
@@ -57,6 +59,9 @@ class Board
     y = piece.position[1]
     @game_board[y][x] = 0
     @pieces.delete(piece)
+    
+    # @pieces -= [piece]
+    # @piece_positions -= [piece.position]
   end
 
   def clear_board
@@ -93,11 +98,11 @@ class Board
     @pieces << Bishop.new('white', [5, 7])
     @pieces << Queen.new('black', [4, 0])
     @pieces << Queen.new('white', [4, 7])
-    @pieces << King.new('black', [3, 0])
-    @pieces << King.new('white', [3, 7])
+    @pieces << @black_king
+    @pieces << @white_king
     (0..7).each do |i|
       @pieces << Pawn.new('black', [i, 1])
-      @pieces << Pawn.new('white', [i, 6])
+      # @pieces << Pawn.new('white', [i, 6])
     end
   end
 
