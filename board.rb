@@ -37,8 +37,8 @@ class Board
     clear_board
     @piece_positions = []
     @pieces.each do |piece|
-      print(piece)
-      print(piece.position)
+      # print(piece)
+      # print(piece.position)
       x = piece.position[0]
       y = piece.position[1]
       @game_board[y][x] = piece
@@ -102,7 +102,7 @@ class Board
     @pieces << @white_king
     (0..7).each do |i|
       @pieces << Pawn.new('black', [i, 1])
-      # @pieces << Pawn.new('white', [i, 6])
+      @pieces << Pawn.new('white', [i, 6])
     end
   end
 

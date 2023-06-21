@@ -9,7 +9,7 @@ class Pawn < Player
     @hasMoved = false
   end
 
-  def possible_moves(board)
+  def possible_moves(board, simple_check)
     moves = []
     x = @position[0]
     y = @position[1]
@@ -19,7 +19,7 @@ class Pawn < Player
       @hasMoved = true
     end
     if new_y.between?(0, 7)
-      if !(board.piece_positions.include?([x, new_y]))
+      if !(board.piece_positions.include?([x, new_y])) && !check_can_enemy_check_there(board, [x, new_y], simple_check)
         moves.push([x, new_y])
         @hasMoved = true
       end
@@ -27,7 +27,7 @@ class Pawn < Player
     [-1, 1].each do |i|
       new_x = x + i
       if new_x.between?(0, 7) && new_y.between?(0, 7)
-        if board.piece_positions.include?([new_x, new_y])
+        if board.piece_positions.include?([new_x, new_y]) && !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
           piece = board.get_piece_at([new_x, new_y])
           if piece.color != color
             moves.push([new_x, new_y])

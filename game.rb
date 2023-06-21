@@ -18,6 +18,9 @@ class Game
 
   def turn
     loop do
+      @black_check = false
+      @white_check = false
+      checkCheck(@board)
       switch_turn
       # binding.pry
       piece, move = input_move
@@ -99,7 +102,8 @@ class Game
   end
 
   def validate_moving_place(moving_place, piece)
-    moves = piece.possible_moves(@board)
+    moves = piece.possible_moves(@board, false)
+    print moves
     # print moves
     if moves.include?(moving_place)
       return true
@@ -121,37 +125,42 @@ class Game
     white_king_position = board.white_king.position
     black_king_position = board.black_king.position
     pieces.each do |piece|
-      moves = piece.possible_moves(board)
+      moves = piece.possible_moves(board, true)
       if moves.include?(white_king_position)
+        print "Check on White"
         @white_check = true
       end
       if moves.include?(black_king_position)
+        print "Check on Black"
         @black_check = true
       end
     end
   end
 
-  def can_black_evade_check
-    pieces = @board.pieces
-    pieces.each do |piece|
-    end
-  end
+  # def can_black_evade_check(potential_move)
+  #   original_piece = get_piece_selected_place(potential_move)
+  #   updated_board = Board.new
+  #   pieces = @board.pieces
+  #   pieces.each do |piece|
+  #     updated_board.pieces.append(piece)
+  #   end
+  # end
 
-  def duplicate_board_for_check_check
-    
+  # def duplicate_board_for_check_check
+  # end
 
-  def will_there_be_check(board, potential_move)
-    enemy_pieces = board.pieces
-    enemy_pieces.each do |piece|
-      if piece.color != @turn && !piece.is_a?(King)
-        moves = piece.possible_moves(board)
-        if moves.include?(potential_move)
-          return true
-        end
-      end
-    end
-    return false
-  end
+  # def will_there_be_check(board, potential_move)
+  #   enemy_pieces = board.pieces
+  #   enemy_pieces.each do |piece|
+  #     if piece.color != @turn && !piece.is_a?(King)
+  #       moves = piece.possible_moves(board, false)
+  #       if moves.include?(potential_move)
+  #         return true
+  #       end
+  #     end
+  #   end
+  #   return false
+  # end
   
 
 end
