@@ -8,6 +8,7 @@ class King < Player
     color == 'black' ? @symbol = '♔' : @symbol = '♚'
     @possibilities = [[0,-1], [0, 1], [-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
     @check = false
+    @hasMoved = false
   end
 
   def possible_moves(board, simple_check)

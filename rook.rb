@@ -6,7 +6,8 @@ class Rook < Player
   def initialize(color, position)
     super
     color == 'black' ? @symbol = '♖' : @symbol = '♜'
-    @possibilities = [[0,-1]]
+    @possibilities = [[0,-1], [0, 1], [-1, 0], [1, 0]]
+    @hasMoved = false
   end
 
   def possible_moves(board, simple_check)

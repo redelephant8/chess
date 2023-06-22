@@ -26,7 +26,6 @@ class Game
       add_to_board(move[1], piece)
       checkCheck(@board)
       if (@black_check && can_black_evade_check(@board) == false) || (@white_check && can_white_evade_check(@board) == false)
-        print "goooooooooo"
         break
       end
     end

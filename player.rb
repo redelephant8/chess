@@ -12,7 +12,6 @@ class Player
     @position = position
   end
 
-
   def check_can_enemy_check_there(board, potential_move, simple_check)
     if simple_check == true
       return false
