@@ -13,7 +13,6 @@ class Queen < Player
     moves = []
     x = @position[0]
     y = @position[1]
-    # binding.pry
     @possibilities.each do |movement|
       (1..7).each do |i|
         new_x = x + (i * movement[0])

@@ -32,17 +32,6 @@ class Rook < Player
             end
           end
         end
-        #   if board.piece_positions.include?([new_x, new_y]) && !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
-        #     piece = board.get_piece_at([new_x, new_y])
-        #     if piece.color != color
-        #       moves.push([new_x, new_y])
-        #     end
-        #     break
-        #   end
-        #   if !board.piece_positions.include?([new_x, new_y]) && !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
-        #     moves.push([new_x, new_y])
-        #   end
-        # end
       end
     end
     return moves
