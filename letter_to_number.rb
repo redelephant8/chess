@@ -19,4 +19,25 @@ module LetterNumber
       7
     end
   end
+
+  def number_to_letter(input)
+    case input
+    when 0
+      'a'
+    when 1
+      'b'
+    when 2
+      'c'
+    when 3
+      'd'
+    when 4
+      'e'
+    when 5
+      'f'
+    when 6
+      'g'
+    when 7
+      'h'
+    end
+  end
 end

@@ -43,11 +43,11 @@ class Game
     @board.print_board
   end
 
-  def input
-    puts @turn.capitalize + ', enter move: '
-    input = gets.chomp
-    convert_input(input)
-  end
+  # def input
+  #   puts @turn.capitalize + ', enter move: '
+  #   input = gets.chomp
+  #   convert_input(input)
+  # end
 
   # def input_piece
   #   puts 'Select a piece to move: '
@@ -60,37 +60,133 @@ class Game
   # end
 
   # returns an array with the selected move and the selected square to move to
-  def convert_input(input)
-    initial = [letter_to_number(input[0]), input[1].to_i - 1]
-    move_to = [letter_to_number(input[3]), input[4].to_i - 1]
-    [initial, move_to]
-  end
+  # def convert_input(input)
+  #   initial = [letter_to_number(input[0]), input[1].to_i - 1]
+  #   move_to = [letter_to_number(input[3]), input[4].to_i - 1]
+  #   [initial, move_to]
+  # end
 
   # def input_move_initial
   #   selected_position = input_piece
   #   selected_piece = get_piece_selected_place(selected_position)
   #   until validate_selected_place(selected_piece)
   #     selected_position = input_piece
-  #     selected_piece = get_piece_selected_place(selected_piece)
+  #     selected_piece = get_piece_selected_place(selected_position)
+  #   end
+  #   selected_piece
+  # end
+
+  # def input_new_move(moves)
+  #   loop do
+  #     selected_move = input_piece
+  #     selected_piece = get_piece_selected_place(selected_position)
+  #     if moves.include?(selected_move)
+  #       return selected_piece
+  #     end
   #   end
   #   selected_piece
 
   # def input_move
   #   initial_piece = input_move_initial
-  #   legit_moves = initial_piece.possible_moves(@board)
-  #   @board.print_board_legit
+  #   moves = initial_piece.possible_moves(@board, false)
+  #   if moves =
+  #   # print moves
+  #   translate_moves(moves)
+  #   new_move = input_new_move
+    
+  # end
 
-  def input_move
-    move = input
-    piece = get_piece_selected_place(move[0])
-    until validate_selected_place(piece) && validate_moving_place(move[1], piece)
-      move =  input
-      piece = get_piece_selected_place(move[0])
+  def print_possible_moves(moves)
+    written_moves = ""
+    moves.each do |move|
+      written_moves += "#{number_to_letter(move[0])}#{move[1] + 1}, "
     end
-    return piece, move
+    return written_moves.slice(0, written_moves.length - 2)
   end
 
-  def check_current_pieces(piece)
+  # def input_move
+  #   move = input
+  #   piece = get_piece_selected_place(move[0])
+  #   until validate_selected_place(piece) && validate_moving_place(move[1], piece)
+  #     move =  input
+  #     piece = get_piece_selected_place(move[0])
+  #   end
+  #   return piece, move
+  # end
+
+
+  # HERE
+  def input_move
+    chosen_initial_coordinates, chosen_piece = input_initial
+    moves = chosen_piece.possible_moves(@board, false)
+    moves == [] ? empty_moves = true : empty_moves = false
+    # binding.pry
+    if empty_moves
+      puts "No moves available for this piece"
+    end
+    written_moves = print_possible_moves(moves)
+    if !empty_moves
+      chosen_final_coordinates = input_coordinates(1, written_moves)
+      own_piece = check_if_own_piece(chosen_final_coordinates)
+    end
+    until !empty_moves && !own_piece && validate_final_coordinates(chosen_final_coordinates, moves)
+      if own_piece || empty_moves
+        chosen_initial_coordinates, chosen_piece = own_piece
+        if empty_moves
+          chosen_initial_coordinates, chosen_piece = input_initial
+        end
+        moves = chosen_piece.possible_moves(@board, false)
+        moves == [] ? empty_moves = true : empty_moves = false
+        if empty_moves
+          puts "No moves available for this piece"
+        end
+        written_moves = print_possible_moves(moves)
+      end
+      if !empty_moves
+        chosen_final_coordinates = input_coordinates(1, written_moves)
+        own_piece = check_if_own_piece(chosen_final_coordinates)
+      end
+    end
+    return chosen_piece, [chosen_initial_coordinates, chosen_final_coordinates]
+  end
+
+  def input_initial
+    chosen_initial_coordinates = input_coordinates(0, nil)
+    chosen_piece = @board.get_piece_at(chosen_initial_coordinates)
+    until validate_initial_piece(chosen_piece)
+      chosen_initial_coordinates = input_coordinates(0, nil)
+      chosen_piece = @board.get_piece_at(chosen_initial_coordinates)
+    end
+    return chosen_initial_coordinates, chosen_piece
+  end
+
+  def input_coordinates(x, moves)
+    if x == 0
+      puts @turn.capitalize + ', select piece to move'
+    else
+      puts @turn.capitalize + ', select place to move to. Options: ['+ moves +']'
+    end
+    input = gets.chomp
+    initial = [letter_to_number(input[0]), input[1].to_i - 1]
+    return initial
+  end
+
+  def check_if_own_piece(chosen_final_coordinates)
+    piece_at_final_coordinates = @board.get_piece_at(chosen_final_coordinates)
+    if validate_initial_piece(piece_at_final_coordinates)
+      return chosen_final_coordinates, piece_at_final_coordinates
+    end
+    return false
+  end
+
+  def validate_final_coordinates(chosen_final_coordinates, moves)
+    if moves.include?(chosen_final_coordinates)
+      return true
+    end
+    return false
+  end
+      
+  def validate_initial_piece(piece)
     board_pieces = @board.pieces
     board_pieces.each do |board_piece|
       if board_piece == piece && piece.color == @turn
@@ -100,22 +196,22 @@ class Game
     false
   end
 
-  def validate_selected_place(selected_place)
-    if check_current_pieces(selected_place)
-      return true
-    end
-    false
-  end
+  # def validate_selected_place(selected_place)
+  #   if check_current_pieces(selected_place)
+  #     return true
+  #   end
+  #   false
+  # end
 
-  def validate_moving_place(moving_place, piece)
-    moves = piece.possible_moves(@board, false)
-    print moves
-    # print moves
-    if moves.include?(moving_place)
-      return true
-    end
-    false
-  end
+  # def validate_moving_place(moving_place, piece)
+  #   moves = piece.possible_moves(@board, false)
+  #   print moves
+  #   # print moves
+  #   if moves.include?(moving_place)
+  #     return true
+  #   end
+  #   false
+  # end
 
   def get_piece_selected_place(selected_place)
     pieces = @board.pieces
@@ -162,7 +258,7 @@ class Game
       if piece.color == 'white'
         # binding.pry
         moves = piece.possible_moves(board, false)
-        print moves
+        # print moves
         if moves != []
           return true
         end

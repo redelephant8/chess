@@ -11,6 +11,8 @@ class King < Player
     @hasMoved = false
   end
 
+
+  KING MOVE IS NOT WORKING FIX TOMORROW
   def possible_moves(board, simple_check)
     moves = []
     x = @position[0]
@@ -33,6 +35,27 @@ class King < Player
           end
         end
       end
+      # if @hasMoved == false
+      #   rooks = board.get_rooks(@color)
+      #   rooks.each do |rook|
+      #     castle = true
+      #     rook_position = rook.position
+      #     smaller = rook_position[0]
+      #     bigger = @position[0]
+      #     if rook_position[0] > @position[0]
+      #       bigger = rook_position[0]
+      #       smaller = @position[0]
+      #     end
+      #     (smaller..bigger).each do |new_x|
+      #       if board.get_piece_at([new_x, y]) != false || check_can_enemy_check_there(board, [new_x, y], true)
+      #         castle = false
+      #       end
+      #     end
+      #     if castle == true
+      #       moves.push([new_x, y])
+      #     end
+      #   end
+      # end
     return moves
   end
 

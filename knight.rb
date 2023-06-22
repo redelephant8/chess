@@ -23,7 +23,6 @@ class Knight < Player
             if piece.color != color && !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
               moves.push([new_x, new_y])
             end
-            break
           else
             if !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
               moves.push([new_x, new_y])

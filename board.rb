@@ -11,8 +11,18 @@ require_relative 'pawn'
 class Board
   attr_reader :pieces, :game_board, :piece_positions, :black_king, :white_king
 
-  def initialize(game_board = Array.new(8) { Array.new(8) { 0 } })
+  def initialize(game_board = Array.new(8) { Array.new(8) { "□" } })
     @game_board = game_board
+    (0..7).each do |row|
+      (0..7).each do |cell|
+        # binding.pry
+        if ((row+1) * (cell+1)) % 2 == 0
+          @game_board[row][cell] = "□"
+        else
+          @game_board[row][cell] = "◼"
+        end
+      end
+    end
     @pieces = []
     @piece_positions = []
     @black_king = King.new('black', [3, 0])
@@ -25,7 +35,12 @@ class Board
     count = 8
     @game_board.reverse.each do |row|
       row.each do |cell|
-        cell == 0 ? (print " #{cell} ") : (print " #{cell.symbol} ")
+        if cell == "□" || cell == "◼"
+          print " #{cell} "
+        else
+          print " #{cell.symbol} "
+        end
+        # cell == "□" ? (print " #{cell} ") : (print " #{cell.symbol} ")
       end
       puts "#{count} \n"
       count -= 1
@@ -66,6 +81,16 @@ class Board
 
   def clear_board
     @game_board = Array.new(8) { Array.new(8) { 0 } }
+    (0..7).each do |row|
+      (0..7).each do |cell|
+        # binding.pry
+        if ((row+1) + (cell+1)) % 2 == 0
+          @game_board[cell][row] = "□"
+        else
+          @game_board[cell][row] = "◼"
+        end
+      end
+    end
   end
 
   def get_piece_at(position)
@@ -75,6 +100,16 @@ class Board
       end
     end
     return false
+  end
+
+  def get_rooks(color)
+    rooks = []
+    @pieces.each do |piece|
+      if piece.is_a?(Rook) && piece.color == color
+        rooks.append(piece)
+      end
+    end
+    return rooks
   end
 
   def update_pieces(piece)
