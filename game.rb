@@ -20,11 +20,15 @@ class Game
     loop do
       @black_check = false
       @white_check = false
-      checkCheck(@board)
       switch_turn
       # binding.pry
       piece, move = input_move
       add_to_board(move[1], piece)
+      checkCheck(@board)
+      if (@black_check && can_black_evade_check(@board) == false) || (@white_check && can_white_evade_check(@board) == false)
+        print "goooooooooo"
+        break
+      end
     end
   end
 
@@ -34,6 +38,9 @@ class Game
 
   def add_to_board(move_to, piece)
     @board.change_position(piece, move_to)
+    if piece.is_a?(Pawn) && piece.hasMoved == false
+      piece.hasMoved = true
+    end
     @board.print_board
   end
 
@@ -137,14 +144,33 @@ class Game
     end
   end
 
-  # def can_black_evade_check(potential_move)
-  #   original_piece = get_piece_selected_place(potential_move)
-  #   updated_board = Board.new
-  #   pieces = @board.pieces
-  #   pieces.each do |piece|
-  #     updated_board.pieces.append(piece)
-  #   end
-  # end
+  def can_black_evade_check(board)
+    pieces = board.pieces
+    pieces.each do |piece|
+      if piece.color == 'black'
+        moves = piece.possible_moves(board, false)
+        if moves != []
+          return true
+        end
+      end
+    end
+    return false
+  end
+
+  def can_white_evade_check(board)
+    pieces = board.pieces
+    pieces.each do |piece|
+      if piece.color == 'white'
+        # binding.pry
+        moves = piece.possible_moves(board, false)
+        print moves
+        if moves != []
+          return true
+        end
+      end
+    end
+    return false
+  end
 
   # def duplicate_board_for_check_check
   # end

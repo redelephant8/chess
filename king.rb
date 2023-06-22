@@ -19,19 +19,21 @@ class King < Player
         new_x = x + movement[0]
         new_y = y + movement[1]
         if new_x.between?(0, 7) && new_y.between?(0, 7)
-            if board.piece_positions.include?([new_x, new_y]) && !check_can_enemy_check_there_king(board, [new_x, new_y], simple_check)
-              piece = board.get_piece_at([new_x, new_y])
-              if piece.color != color
-                moves.push([new_x, new_y])
-              end
+          piece = board.get_piece_at([new_x, new_y])
+          if piece != false
+            if piece.color != color && !check_can_enemy_check_there_king(board, [new_x, new_y], simple_check)
+              moves.push([new_x, new_y])
             end
-            if !board.piece_positions.include?([new_x, new_y]) && !check_can_enemy_check_there_king(board, [new_x, new_y], simple_check)
-                moves.push([new_x, new_y])
+            break
+          else
+            if !check_can_enemy_check_there_king(board, [new_x, new_y], simple_check)
+              moves.push([new_x, new_y])
             end
+          end
         end
-    end
+      end
     return moves
-    end
+  end
 
 
     # TODO: add forced check if other king is nearby / vicinity of 1 block

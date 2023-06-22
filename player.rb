@@ -43,6 +43,7 @@ class Player
         if moves.include?(king_position)
           # print "yes"
           self.position = original_position
+          # binding.pry
           return true
         end
       end
