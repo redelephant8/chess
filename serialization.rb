@@ -23,7 +23,12 @@ module Saving
         puts ""
         puts "Please enter the game file you want to load: "
         file_name = gets.chomp.downcase
-        file = YAML.load(File.read("saves/#{file_name}.yml"))
+        begin
+            file = YAML.load(File.read("saves/#{file_name}.yml"))
+        rescue => e
+            puts "\nFile name not found"
+            return
+        end
         pieces_arr = file[:board_pieces]
         @turn = file[:turn]
         File.delete("saves/#{file_name}.yml")

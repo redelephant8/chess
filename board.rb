@@ -59,6 +59,17 @@ class Board
       enemy_piece = get_piece_at(move_to)
       delete_piece(enemy_piece)
     end
+    castling(piece, move_to)
+    new_piece = pawn_promotion(piece, move_to)
+    if new_piece != nil
+      delete_piece(piece)
+      @pieces.push(new_piece)
+    else
+      piece.position = move_to
+    end
+  end
+
+  def castling(piece, move_to)
     if piece.is_a?(King) && piece.castling != []
       piece.castling.each do |castle_movement|
         if castle_movement[1] == move_to
@@ -67,7 +78,27 @@ class Board
         end
       end
     end
-    piece.position = move_to
+  end
+
+  def pawn_promotion(piece, move_to)
+    new_piece = nil
+    if piece.is_a?(Pawn) && piece.pawn_promotion != []
+      position = piece.position
+      color = piece.color
+      puts "Enter the piece type you want to promote to: (B, K, R, Q):"
+      promotion = gets.chomp
+      case promotion
+      when 'B'
+        new_piece = Bishop.new(color, move_to)
+      when 'K'
+        new_piece = Knight.new(color, move_to)
+      when 'R'
+        new_piece = Rook.new(color, move_to)
+      when 'Q'
+        new_piece = Queen.new(color, move_to)
+      end
+    end
+    return new_piece
   end
 
   def delete_piece(piece)
@@ -128,7 +159,7 @@ class Board
     @pieces << Bishop.new('black', [5, 0])
     # @pieces << Bishop.new('white', [2, 7])
     @pieces << Bishop.new('white', [5, 7])
-    @pieces << Queen.new('black', [2, 4])
+    @pieces << Queen.new('black', [4, 0])
     @pieces << Queen.new('white', [4, 7])
     @pieces << @black_king
     @pieces << @white_king

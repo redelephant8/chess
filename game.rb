@@ -14,7 +14,7 @@ class Game
     @pieces_arr = []
     @turn = 'black'
     puts "Welcome to Chess!"
-    puts "Type load to load a previous game: "
+    puts "Type any key to begin or load to load a local game: "
     answer = gets.chomp
     if answer == 'load'
       load
