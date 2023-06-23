@@ -2,12 +2,12 @@ require_relative 'player'
 require 'pry-byebug'
 class Pawn < Player
   attr_reader :symbol
-  attr_accessor :hasMoved
+  # attr_accessor :hasMoved
 
   def initialize(color, position)
     super
     color == 'black' ? @symbol = '♙' : @symbol = '♟︎'
-    @hasMoved = false
+    # @hasMoved = false
   end
 
   def possible_moves(board, simple_check)
@@ -41,6 +41,7 @@ class Pawn < Player
     end
 
     [-1, 1].each do |i|
+      color == 'black' ? new_y = y + 1 : new_y = y - 1
       new_x = x + i
       if new_x.between?(0, 7) && new_y.between?(0, 7)
         piece = board.get_piece_at([new_x, new_y])

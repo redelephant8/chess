@@ -9,13 +9,12 @@ require_relative 'pawn'
 
 # class for the chess board
 class Board
-  attr_reader :pieces, :game_board, :piece_positions, :black_king, :white_king
+  attr_reader :pieces, :game_board, :black_king, :white_king
 
   def initialize(game_board = Array.new(8) { Array.new(8) { "□" } })
     @game_board = game_board
     (0..7).each do |row|
       (0..7).each do |cell|
-        # binding.pry
         if ((row+1) * (cell+1)) % 2 == 0
           @game_board[row][cell] = "□"
         else
@@ -24,7 +23,6 @@ class Board
       end
     end
     @pieces = []
-    @piece_positions = []
     @black_king = King.new('black', [3, 0])
     @white_king = King.new('white', [3, 7])
   end
@@ -40,7 +38,6 @@ class Board
         else
           print " #{cell.symbol} "
         end
-        # cell == "□" ? (print " #{cell} ") : (print " #{cell.symbol} ")
       end
       puts "#{count} \n"
       count -= 1
@@ -50,14 +47,10 @@ class Board
 
   def place_pieces
     clear_board
-    @piece_positions = []
     @pieces.each do |piece|
-      # print(piece)
-      # print(piece.position)
       x = piece.position[0]
       y = piece.position[1]
       @game_board[y][x] = piece
-      @piece_positions.append(piece.position)
     end
   end
 
@@ -65,6 +58,14 @@ class Board
     if get_piece_at(move_to) != false
       enemy_piece = get_piece_at(move_to)
       delete_piece(enemy_piece)
+    end
+    if piece.is_a?(King) && piece.castling != []
+      piece.castling.each do |castle_movement|
+        if castle_movement[1] == move_to
+          rook = castle_movement[0]
+          rook.position = castle_movement[2]
+        end
+      end
     end
     piece.position = move_to
   end
@@ -74,16 +75,12 @@ class Board
     y = piece.position[1]
     @game_board[y][x] = 0
     @pieces.delete(piece)
-    
-    # @pieces -= [piece]
-    # @piece_positions -= [piece.position]
   end
 
   def clear_board
     @game_board = Array.new(8) { Array.new(8) { 0 } }
     (0..7).each do |row|
       (0..7).each do |cell|
-        # binding.pry
         if ((row+1) + (cell+1)) % 2 == 0
           @game_board[cell][row] = "□"
         else
@@ -125,13 +122,13 @@ class Board
     @pieces << Rook.new('white', [7, 7])
     @pieces << Knight.new('black', [1, 0])
     @pieces << Knight.new('black', [6, 0])
-    @pieces << Knight.new('white', [1, 7])
+    # @pieces << Knight.new('white', [1, 7])
     @pieces << Knight.new('white', [6, 7])
     @pieces << Bishop.new('black', [2, 0])
     @pieces << Bishop.new('black', [5, 0])
-    @pieces << Bishop.new('white', [2, 7])
+    # @pieces << Bishop.new('white', [2, 7])
     @pieces << Bishop.new('white', [5, 7])
-    @pieces << Queen.new('black', [4, 0])
+    @pieces << Queen.new('black', [2, 4])
     @pieces << Queen.new('white', [4, 7])
     @pieces << @black_king
     @pieces << @white_king

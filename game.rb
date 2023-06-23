@@ -8,11 +8,8 @@ class Game
 
   def initialize
     @board = Board.new
-    @selected = nil
     @black_check = false
     @white_check = false
-    @black_checkmate = false
-    @white_checkmate = false
     @turn = 'black'
   end
 
@@ -36,7 +33,7 @@ class Game
 
   def add_to_board(move_to, piece)
     @board.change_position(piece, move_to)
-    if piece.is_a?(Pawn) && piece.hasMoved == false
+    if piece.hasMoved == false
       piece.hasMoved = true
     end
     @board.print_board
@@ -49,7 +46,6 @@ class Game
     end
     return written_moves.slice(0, written_moves.length - 2)
   end
-
 
   def input_move
     chosen_initial_coordinates, chosen_piece = input_initial
@@ -146,11 +142,11 @@ class Game
     pieces.each do |piece|
       moves = piece.possible_moves(board, true)
       if moves.include?(white_king_position)
-        print "Check on White"
+        puts "Check on White"
         @white_check = true
       end
       if moves.include?(black_king_position)
-        print "Check on Black"
+        puts "Check on Black"
         @black_check = true
       end
     end
@@ -173,9 +169,7 @@ class Game
     pieces = board.pieces
     pieces.each do |piece|
       if piece.color == 'white'
-        # binding.pry
         moves = piece.possible_moves(board, false)
-        # print moves
         if moves != []
           return true
         end
@@ -183,11 +177,11 @@ class Game
     end
     return false
   end
-  
-
 end
 
-game = Game.new
-game.board.setup_board
-game.board.print_board
-game.turn
+def begin_game
+  game = Game.new
+  game.board.setup_board
+  game.board.print_board
+  game.turn
+end

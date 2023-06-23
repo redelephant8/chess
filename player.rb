@@ -5,11 +5,12 @@ require 'pry-byebug'
 class Player
 
   attr_reader :color
-  attr_accessor :position
+  attr_accessor :position, :hasMoved
 
   def initialize(color, position = nil)
     @color = color
     @position = position
+    @hasMoved = false
   end
 
   def check_can_enemy_check_there(board, potential_move, simple_check)
