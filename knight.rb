@@ -13,7 +13,6 @@ class Knight < Player
     moves = []
     x = @position[0]
     y = @position[1]
-    # binding.pry
     @possibilities.each do |movement|
         new_x = x + movement[0]
         new_y = y + movement[1]

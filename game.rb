@@ -1,16 +1,26 @@
 require_relative 'board'
 require 'pry-byebug'
+require 'yaml'
 require_relative 'letter_to_number'
+require_relative 'serialization'
 
 class Game
   include LetterNumber
-  attr_reader :board
+  include Saving
+  attr_accessor :board
 
   def initialize
     @board = Board.new
+    @pieces_arr = []
+    @turn = 'black'
+    puts "Welcome to Chess!"
+    puts "Type load to load a previous game: "
+    answer = gets.chomp
+    if answer == 'load'
+      load
+    end
     @black_check = false
     @white_check = false
-    @turn = 'black'
   end
 
   def turn
@@ -97,6 +107,9 @@ class Game
       puts @turn.capitalize + ', select place to move to. Options: ['+ moves +']'
     end
     input = gets.chomp
+    if input == 'save'
+      package_save(@board)
+    end
     initial = [letter_to_number(input[0]), input[1].to_i - 1]
     return initial
   end
@@ -177,6 +190,42 @@ class Game
     end
     return false
   end
+
+  def package_save(board)
+    pieces = board.pieces
+    @pieces_arr = []
+    pieces.each do |piece|
+      @pieces_arr.push([piece.class.name, piece.position, piece.color, piece.hasMoved])
+    end
+    save
+  end
+
+  def unpackage_save(pieces_arr)
+    pieces_arr.each do |piece_data|
+      case piece_data[0]
+      when 'King'
+        piece = King.new(piece_data[2], piece_data[1])
+        piece.hasMoved = piece_data[3]
+      when 'Queen'
+        piece = Queen.new(piece_data[2], piece_data[1])
+        piece.hasMoved = piece_data[3]
+      when 'Rook'
+        piece = Rook.new(piece_data[2], piece_data[1])
+        piece.hasMoved = piece_data[3]
+      when 'Bishop'
+        piece = Bishop.new(piece_data[2], piece_data[1])
+        piece.hasMoved = piece_data[3]
+      when 'Knight'
+        piece = Knight.new(piece_data[2], piece_data[1])
+        piece.hasMoved = piece_data[3]
+      when 'Pawn'
+        piece = Pawn.new(piece_data[2], piece_data[1])
+        piece.hasMoved = piece_data[3]
+      end
+      @board.pieces.push(piece)
+    end
+  end
+
 end
 
 def begin_game
