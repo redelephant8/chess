@@ -12,6 +12,7 @@ class Game
   def initialize
     @board = Board.new
     @pieces_arr = []
+    @en_passant_pawn = []
     @turn = 'black'
     puts "Welcome to Chess!"
     puts "Type any key to begin or load to load a local game: "
@@ -206,10 +207,14 @@ class Game
     pieces.each do |piece|
       @pieces_arr.push([piece.class.name, piece.position, piece.color, piece.hasMoved])
     end
+    if board.last_prepped_en_passant_pawn != nil
+      piece = board.last_prepped_en_passant_pawn
+      @en_passant_pawn = [[piece.position[0], piece.position[1]], piece.color, piece.hasMoved]
+    end
     save
   end
 
-  def unpackage_save(pieces_arr)
+  def unpackage_save(pieces_arr, en_passant_pawn)
     pieces_arr.each do |piece_data|
       case piece_data[0]
       when 'King'
@@ -237,6 +242,14 @@ class Game
         piece.hasMoved = piece_data[3]
       end
       @board.pieces.push(piece)
+    end
+
+    if en_passant_pawn != []
+      @board.last_prepped_en_passant_pawn = Pawn.new(en_passant_pawn[1], en_passant_pawn[0])
+      @board.last_prepped_en_passant_pawn.hasMoved = en_passant_pawn[2]
+      current = @board.get_piece_at(en_passant_pawn[0])
+      @board.delete_piece(current)
+      @board.pieces.append(@board.last_prepped_en_passant_pawn)
     end
   end
 

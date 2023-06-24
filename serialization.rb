@@ -9,7 +9,8 @@ module Saving
             file = File.open("saves/#{file_name}.yml", 'w')
             YAML.dump({
                 :board_pieces => @pieces_arr,
-                :turn => @turn
+                :turn => @turn,
+                :en_passant_pawn => @en_passant_pawn
             }, file)
             file.close
             abort "The game has succesfully been saved to your local device"
@@ -31,9 +32,10 @@ module Saving
         end
         pieces_arr = file[:board_pieces]
         @turn = file[:turn]
+        en_passant_pawn = file[:en_passant_pawn]
         File.delete("saves/#{file_name}.yml")
         @board = Board.new
-        unpackage_save(pieces_arr)
+        unpackage_save(pieces_arr, en_passant_pawn)
         self.board.print_board
         self.switch_turn
         self.turn

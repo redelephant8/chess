@@ -9,8 +9,8 @@ require_relative 'pawn'
 
 # class for the chess board
 class Board
-  attr_reader :pieces, :game_board, :last_prepped_en_passant_pawn
-  attr_accessor :black_king, :white_king
+  attr_reader :pieces, :game_board
+  attr_accessor :black_king, :white_king, :last_prepped_en_passant_pawn
 
   def initialize(game_board = Array.new(8) { Array.new(8) { "□" } })
     @game_board = game_board
@@ -49,7 +49,6 @@ class Board
 
   def place_pieces
     clear_board
-    # binding.pry
     @pieces.each do |piece|
       x = piece.position[0]
       y = piece.position[1]
@@ -101,7 +100,7 @@ class Board
     if piece.is_a?(Pawn) && @last_prepped_en_passant_pawn != nil && piece.en_passant != []
       piece.en_passant.each do |pawn_movement|
         if pawn_movement[1] == move_to
-          delete_piece(last_prepped_en_passant_pawn)
+          delete_piece(@last_prepped_en_passant_pawn)
           break
         end
       end
@@ -111,7 +110,6 @@ class Board
   def pawn_promotion(piece, move_to)
     new_piece = nil
     if piece.is_a?(Pawn) 
-      # binding.pry
       piece.pawn_promotion.each do |pawn_movement|
         if pawn_movement != [] && move_to == pawn_movement[1]
           position = piece.position

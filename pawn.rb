@@ -58,7 +58,7 @@ class Pawn < Player
       new_x = prepped_pawn.position[0]
       current_x = @position[0]
       if new_x - current_x == 1 || current_x - new_x == 1
-        if new_x.between?(0, 7) && new_y.between?(0, 7)
+        if new_x.between?(0, 7) && new_y.between?(0, 7) && @position[1] == prepped_pawn.position[1]
           if prepped_pawn.color != color && !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
             @en_passant.push([self, [new_x, new_y]])
             moves.push([new_x, new_y])

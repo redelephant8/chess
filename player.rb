@@ -39,16 +39,12 @@ class Player
     enemy_pieces.each do |piece|
       if piece.color != color && !piece.is_a?(King)
         moves = piece.possible_moves(updated_board, true)
-        # print moves
         if moves.include?(king_position)
-          # print "yes"
           self.position = original_position
-          # binding.pry
           return true
         end
       end
     end
-    # print "nonononononon"
     self.position = original_position
     return false
   end
