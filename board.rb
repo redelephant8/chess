@@ -9,7 +9,8 @@ require_relative 'pawn'
 
 # class for the chess board
 class Board
-  attr_reader :pieces, :game_board, :black_king, :white_king
+  attr_reader :pieces, :game_board
+  attr_accessor :black_king, :white_king
 
   def initialize(game_board = Array.new(8) { Array.new(8) { "□" } })
     @game_board = game_board
@@ -47,6 +48,7 @@ class Board
 
   def place_pieces
     clear_board
+    # binding.pry
     @pieces.each do |piece|
       x = piece.position[0]
       y = piece.position[1]
@@ -62,6 +64,7 @@ class Board
     castling(piece, move_to)
     new_piece = pawn_promotion(piece, move_to)
     if new_piece != nil
+      binding.pry
       delete_piece(piece)
       @pieces.push(new_piece)
     else
@@ -82,20 +85,26 @@ class Board
 
   def pawn_promotion(piece, move_to)
     new_piece = nil
-    if piece.is_a?(Pawn) && piece.pawn_promotion != []
-      position = piece.position
-      color = piece.color
-      puts "Enter the piece type you want to promote to: (B, K, R, Q):"
-      promotion = gets.chomp
-      case promotion
-      when 'B'
-        new_piece = Bishop.new(color, move_to)
-      when 'K'
-        new_piece = Knight.new(color, move_to)
-      when 'R'
-        new_piece = Rook.new(color, move_to)
-      when 'Q'
-        new_piece = Queen.new(color, move_to)
+    if piece.is_a?(Pawn) 
+      # binding.pry
+      piece.pawn_promotion.each do |pawn_movement|
+        if pawn_movement != [] && move_to == pawn_movement[1]
+          position = piece.position
+          color = piece.color
+          puts "Enter the piece type you want to promote to: (B, K, R, Q):"
+          promotion = gets.chomp
+          case promotion
+          when 'B'
+            new_piece = Bishop.new(color, move_to)
+          when 'K'
+            new_piece = Knight.new(color, move_to)
+          when 'R'
+            new_piece = Rook.new(color, move_to)
+          when 'Q'
+            new_piece = Queen.new(color, move_to)
+          end
+        return new_piece
+        end
       end
     end
     return new_piece

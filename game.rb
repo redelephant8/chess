@@ -206,6 +206,11 @@ class Game
       when 'King'
         piece = King.new(piece_data[2], piece_data[1])
         piece.hasMoved = piece_data[3]
+        if piece_data[2] == 'black'
+          @board.black_king = piece
+        else
+          @board.white_king = piece
+        end
       when 'Queen'
         piece = Queen.new(piece_data[2], piece_data[1])
         piece.hasMoved = piece_data[3]

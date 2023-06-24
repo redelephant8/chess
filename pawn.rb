@@ -10,9 +10,10 @@ class Pawn < Player
     # @hasMoved = false
   end
 
-  ADD PAWN PROMOTION TO DIAGONAL EATING MOVE TOO TOMORROW
+  # ADD PAWN PROMOTION TO DIAGONAL EATING MOVE TOO TOMORROW
   def possible_moves(board, simple_check)
     moves = []
+    @pawn_promotion = []
     x = @position[0]
     y = @position[1]
     # if @hasMoved == false && !check_can_enemy_check_there(board, [x, new_y], simple_check)
@@ -22,10 +23,7 @@ class Pawn < Player
       color == 'black' ? new_y = y + 2 : new_y = y - 2
       if new_y.between?(0, 7)
         piece = board.get_piece_at([x, new_y])
-        if piece != false
-          return moves
-        end
-        if !check_can_enemy_check_there(board, [x, new_y], simple_check)
+        if !piece && !check_can_enemy_check_there(board, [x, new_y], simple_check)
           moves.push([x, new_y])
         end
       end
@@ -38,7 +36,7 @@ class Pawn < Player
       # end
       if !piece && !check_can_enemy_check_there(board, [x, new_y], simple_check)
         if new_y == 7 || new_y == 0
-          @pawn_promotion = [self, [x, new_y]]
+          @pawn_promotion.push([self, [x, new_y]])
         end
         moves.push([x, new_y])
       end
@@ -51,6 +49,9 @@ class Pawn < Player
         piece = board.get_piece_at([new_x, new_y])
         if piece != false 
           if piece.color != color && !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
+            if new_y == 7 || new_y == 0
+              @pawn_promotion.push([self, [new_x, new_y]])
+            end
             moves.push([new_x, new_y])
           end
         end
