@@ -31,9 +31,7 @@ class Game
       piece, move = input_move
       add_to_board(move[1], piece)
       checkCheck(@board)
-      if (@black_check && can_black_evade_check(@board) == false) || (@white_check && can_white_evade_check(@board) == false)
-        break
-      end
+      checkmate(@board)
     end
   end
 
@@ -189,6 +187,17 @@ class Game
       end
     end
     return false
+  end
+
+  def checkmate(board)
+    if (@black_check && can_black_evade_check(board) == false) || (@white_check && can_white_evade_check(board) == false)
+      if @black_check
+        puts "\nBlack Checkmate\n\nWhite wins!"
+      else
+        puts "\nWhite Checkmate\n\nBlack wins!"
+      end
+      exit
+    end
   end
 
   def package_save(board)

@@ -1,0 +1,30 @@
+
+[1mFrom:[0m /home/orian/odin_project/Ruby/chess/rook.rb:14 Rook#possible_moves:
+
+    [1;34m13[0m: [32mdef[0m [1;34mpossible_moves[0m(board, simple_check)
+ => [1;34m14[0m:   moves = []
+    [1;34m15[0m:   x = @position[[1;34m0[0m]
+    [1;34m16[0m:   y = @position[[1;34m1[0m]
+    [1;34m17[0m:   [1;34m# binding.pry[0m
+    [1;34m18[0m:   @possibilities.each [32mdo[0m |movement|
+    [1;34m19[0m:     ([1;34m1[0m..[1;34m7[0m).each [32mdo[0m |i|
+    [1;34m20[0m:       new_x = x + (i * movement[[1;34m0[0m])
+    [1;34m21[0m:       new_y = y + (i * movement[[1;34m1[0m])
+    [1;34m22[0m:       [32mif[0m new_x.between?([1;34m0[0m, [1;34m7[0m) && new_y.between?([1;34m0[0m, [1;34m7[0m)
+    [1;34m23[0m:         piece = board.get_piece_at([new_x, new_y])
+    [1;34m24[0m:         [32mif[0m piece != [1;36mfalse[0m
+    [1;34m25[0m:           [32mif[0m piece.color != color && !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
+    [1;34m26[0m:             moves.push([new_x, new_y])
+    [1;34m27[0m:           [32mend[0m
+    [1;34m28[0m:           [32mbreak[0m
+    [1;34m29[0m:         [32melse[0m
+    [1;34m30[0m:           [32mif[0m !check_can_enemy_check_there(board, [new_x, new_y], simple_check)
+    [1;34m31[0m:             moves.push([new_x, new_y])
+    [1;34m32[0m:           [32mend[0m
+    [1;34m33[0m:         [32mend[0m
+    [1;34m34[0m:       [32mend[0m
+    [1;34m35[0m:     [32mend[0m
+    [1;34m36[0m:   [32mend[0m
+    [1;34m37[0m:   [32mreturn[0m moves
+    [1;34m38[0m: [32mend[0m
+
