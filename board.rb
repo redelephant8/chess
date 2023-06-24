@@ -9,7 +9,7 @@ require_relative 'pawn'
 
 # class for the chess board
 class Board
-  attr_reader :pieces, :game_board
+  attr_reader :pieces, :game_board, :last_prepped_en_passant_pawn
   attr_accessor :black_king, :white_king
 
   def initialize(game_board = Array.new(8) { Array.new(8) { "□" } })
@@ -26,6 +26,7 @@ class Board
     @pieces = []
     @black_king = King.new('black', [3, 0])
     @white_king = King.new('white', [3, 7])
+    @last_prepped_en_passant_pawn = nil
   end
 
   def print_board
@@ -62,9 +63,10 @@ class Board
       delete_piece(enemy_piece)
     end
     castling(piece, move_to)
+    en_passant(piece, move_to)
+    check_prep_for_passant(piece, move_to)
     new_piece = pawn_promotion(piece, move_to)
     if new_piece != nil
-      binding.pry
       delete_piece(piece)
       @pieces.push(new_piece)
     else
@@ -78,6 +80,29 @@ class Board
         if castle_movement[1] == move_to
           rook = castle_movement[0]
           rook.position = castle_movement[2]
+        end
+      end
+    end
+  end
+
+  def check_prep_for_passant(piece, move_to)
+    if piece.is_a?(Pawn)
+      current_y = piece.position[1]
+      new_y = move_to[1]
+      if new_y - current_y == 2 || current_y - new_y == 2
+        @last_prepped_en_passant_pawn = piece
+        return
+      end
+    end
+    @last_prepped_en_passant_pawn = nil
+  end
+
+  def en_passant(piece, move_to)
+    if piece.is_a?(Pawn) && @last_prepped_en_passant_pawn != nil && piece.en_passant != []
+      piece.en_passant.each do |pawn_movement|
+        if pawn_movement[1] == move_to
+          delete_piece(last_prepped_en_passant_pawn)
+          break
         end
       end
     end
