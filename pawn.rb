@@ -1,5 +1,4 @@
 require_relative 'player'
-require 'pry-byebug'
 class Pawn < Player
   attr_reader :symbol, :pawn_promotion, :en_passant
 

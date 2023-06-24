@@ -1,5 +1,4 @@
 require_relative 'player'
-require 'pry-byebug'
 class Knight < Player
   attr_reader :symbol
 

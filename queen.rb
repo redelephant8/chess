@@ -1,5 +1,4 @@
 require_relative 'player'
-require 'pry-byebug'
 class Queen < Player
   attr_reader :symbol
 

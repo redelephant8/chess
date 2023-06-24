@@ -1,6 +1,5 @@
 
 require_relative 'board'
-require 'pry-byebug'
 
 class Player
 

@@ -1,5 +1,4 @@
 require_relative 'player'
-require 'pry-byebug'
 class Rook < Player
   attr_reader :symbol
 

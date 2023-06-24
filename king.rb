@@ -1,5 +1,4 @@
 require_relative 'player'
-require 'pry-byebug'
 class King < Player
   attr_reader :symbol, :castling
 
